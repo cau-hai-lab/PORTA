@@ -110,7 +110,7 @@ The main entry point is `prune.py`. Pruning runs on a single GPU with FP32 preci
 |---|---|
 | `wanda` | [Sun et al., ICLR 2024](https://arxiv.org/abs/2306.11695) |
 | `sparsegpt` | [Frantar & Alistarh, ICML 2023](https://arxiv.org/abs/2301.00774) |
-| `ecoflap` | [Sung et al., ICLR 2024](https://arxiv.org/abs/2409.12191) |
+| `ecoflap` | [Sung et al., ICLR 2024](https://arxiv.org/abs/2310.02998) |
 | `multiflow` | [Farina et al., CVPR 2024](https://arxiv.org/abs/2404.05621) |
 
 ## Main Results
