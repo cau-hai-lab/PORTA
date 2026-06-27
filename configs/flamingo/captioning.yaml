@@ -1,0 +1,47 @@
+train_file: ['data/finetune/ic/coco_karpathy_train.json']
+val_file: 'data/finetune/ic/coco_karpathy_val.json'
+test_file: 'data/finetune/ic/coco_karpathy_test.json'
+
+image_root: 'images/coco/'
+val_gt_file: 'data/finetune/ic/coco_karpathy_val_gt.json'
+test_gt_file: 'data/finetune/ic/coco_karpathy_test_gt.json'
+
+# Flamingo: CLIP ViT-L/14 positional embedding(257 tokens) 기준 → 224 권장
+image_res: 224
+max_tokens: 40
+
+batch_size_target: 256
+batch_size_train: 32
+batch_size_test: 32
+batch_size_test_text: 32
+
+start_eval: 0
+pretrained: ''
+
+log_freq: 16
+
+# generation configs
+max_length: 20
+min_length: 5
+num_beams: 3
+
+# dataset 쪽이 prompt를 요구해서 반드시 넣어야 함
+# (create_dataset에서 config['prompt'] 참조)
+prompt: ''
+
+# Flamingo generate prompt (모델 내부용)
+gen_prompt: "<image> <|endofchunk|> Describe this image."
+
+# learning settings (학습 안 하면 크게 상관 없음)
+optimizer: {init_lr: 1e-5, weight_decay: 0.05, min_lr: 0}
+scheduler: {sched: cosine, epochs: 10, num_warmup_steps: 0}
+
+# debug flags
+debug_tokenizer: false
+debug_generate_shapes: true
+debug_gates: true
+
+wandb_data:
+  name: flamingo_captioning
+  project: captioning_flamingo
+  tags: [flamingo]

@@ -1,0 +1,15 @@
+max_tokens: 128
+max_words: 40
+image_res: 336
+batch_size: 2
+return_index: false
+use_test_transform: false
+
+coco_file: 'data/pretrain/coco_pretrain.json'
+coco_image_root: 'images/coco'
+
+image_key: 'image'
+caption_key: 'caption'
+dataset_key: 'dataset'
+
+model_name: 'Qwen/Qwen2-VL-2B-Instruct'

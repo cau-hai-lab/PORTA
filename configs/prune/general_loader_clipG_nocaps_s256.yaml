@@ -1,0 +1,14 @@
+max_tokens: 77
+image_res: 224
+batch_size: 8
+return_index: false
+use_test_transform: false
+
+nocaps_file: 'data/pretrain/nocaps_val_pretrain.json'
+nocaps_image_root: 'images/nocaps_val'
+
+image_key:   "image"
+caption_key: "caption"
+dataset_key: "dataset"
+
+max_words: 40

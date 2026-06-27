@@ -1,0 +1,47 @@
+# dataset configuration
+answer_list: data/finetune/vqa/answer_list.json
+# answer_list: data/finetune/vqa/EarthVQA_answer_list.json
+vqa_root: 'images/coco' 
+# earthvqa_root: 'images/EarthVQA'
+vg_root: 'images/vg'  
+train_file: [data/finetune/vqa/vqa_train.json, data/finetune/vqa/vqa_val.json, data/finetune/vqa/vg_qa.json]
+# train_file: [data/finetune/vqa/EarthVQA_train.json, data/finetune/vqa/EarthVQA_val.json]
+val_file: [data/finetune/vqa/vqa_val.json]
+# val_file: [data/finetune/vqa/EarthVQA_val.json]
+test_file: [data/finetune/vqa/vqa_test.json]
+# test_file: [data/finetune/vqa/EarthVQA_test.json]
+
+# ★ 공식 VQAv2 GT 경로 추가
+ann_file_val: data/finetune/vqa/v2_mscoco_val2014_annotations.json
+ques_file_val: data/finetune/vqa/v2_OpenEnded_mscoco_val2014_questions.json
+
+ann_root: 'annotation'
+print_freq: 256
+
+# set pretrained as a file path or an url
+pretrained: ''
+
+# size of vit model; base or large
+vit: 'base'
+batch_size_target: 256 #128
+batch_size_test: 64
+batch_size_train: 32 #64
+vit_grad_ckpt: False
+vit_ckpt_layer: 0
+
+image_res: 224
+max_tokens: 35
+k_test: 64 #128-> rank()에서 상위 k_test개의 답변에 대해서 CEloss를 계산해 추론함(k_test가 결과에 어떤 영향? 클수록 많은 추론 후보를 고려하나, 계산 비용도 증가)
+inference: 'rank' # generate에서의 성능은??확인해보기
+
+# optimization config
+init_lr: 2e-5
+optimizer: {init_lr: 2e-5, weight_decay: 0.05, min_lr: 0}
+scheduler: {epochs: 10, num_warmup_steps: 0, sched: cosine}
+
+shira_epochs: 10
+
+wandb_data:
+  name: mask_90
+  project: VQA_EarthVQA_generate
+  tags: [mask_90]

@@ -1,0 +1,34 @@
+# configs/clip/pretrain_clip_vitl14.yaml
+
+# ---- 모델 ----
+max_tokens: 77                              # CLIP BPE 기본 최대 토큰
+image_res: 224                              # transform에서 사용
+batch_size: 32
+return_index: false
+use_test_transform: false                   # transform 선택에 쓰고 싶으면 사용
+
+# ---- 데이터(필요한 것만 켜기) ----
+vg_file: 'data/pretrain/vg_dense_gby_image.json'
+flickr30k_file: 'data/pretrain/flickr30k_pretrain.json'
+#cc3m_file: 'data/pretrain/cc3m_pretrain.json'
+# SkyScript_file: 'data/pretrain/SkyScript_pretrain.json'
+# nwpu_file: 'data/pretrain/nwpu_pretrain.json'
+# rsitmd_file: 'data/pretrain/rsitmd_pretrain.json'
+# rsicd_file: 'data/pretrain/rsicd_pretrain.json'
+
+# 이미지 루트
+vg_image_root: 'images/vg'
+flickr30k_image_root: 'images/flickr30k'
+#cc3m_image_root: 'images/cc3m'
+# SkyScript_image_root: 'images/SkyScript'
+# nwpu_image_root: 'images/NWPU-captions'
+# rsitmd_image_root: 'images/rsitmd'
+# rsicd_image_root: 'images/rsicd'
+
+# ---- 어노테이션 공통 키 (BLIP/XVLM 동일) ----
+image_key:   "image"
+caption_key: "caption"
+dataset_key: "dataset"
+
+# ---- 텍스트 전처리 옵션(있으면 pre_caption에서 사용) ----
+max_words: 40

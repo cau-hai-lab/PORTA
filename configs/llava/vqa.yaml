@@ -1,0 +1,117 @@
+# ============================================================
+# LLaVA VQA zero-shot evaluation config
+# (vqa.py --model llava --zero_shot 로 사용하는 걸 전제로 작성)
+# ============================================================
+
+# -------------------------
+# dataset configuration
+# -------------------------
+# answer_list: data/finetune/vqa/answer_list.json   # LLaVA에서는 rank를 안 쓰지만,
+#                                                  # 기존 VQA dataset 로더 호환을 위해 그대로 둠
+# vqa_root: 'images/coco'
+# vg_root: 'images/vg'
+
+# train_file: [data/finetune/vqa/vqa_train.json,
+#              data/finetune/vqa/vqa_val.json,
+#              data/finetune/vqa/vg_qa.json]
+
+# val_file: [data/finetune/vqa/vqa_val.json]
+# test_file: [data/finetune/vqa/vqa_test.json]
+
+# # ★ 공식 VQAv2 GT 경로 (VAL split official eval 용)
+# ann_file_val: data/finetune/vqa/v2_mscoco_val2014_annotations.json
+# ques_file_val: data/finetune/vqa/v2_OpenEnded_mscoco_val2014_questions.json
+
+
+# --- dataset config (ScienceQA) ---
+vqa_root: "images/scienceqa"   # 여기에 images/, problems.json 있음
+vg_root: ""                                  # 안 쓰면 빈 문자열
+
+train_file: ["data/finetune/vqa/scienceqa_train.json"]   # 지금은 zero-shot eval만 한다면 비워도 OK
+val_file: ["data/finetune/vqa/scienceqa_val.json"]
+test_file: ["data/finetune/vqa/scienceqa_test.json"]
+
+# VQAv2와는 다르게 answer_list 안 써도 됨 (rank 방식 X)
+answer_list: ""
+
+ann_root: 'annotation'
+
+scienceqa_problems: data/finetune/vqa/problems.json
+scienceqa_split_file: data/finetune/vqa/pid_splits.json
+scienceqa_split_name: test
+
+# 로그 출력 주기
+print_freq: 32   # LLaVA는 느려서 조금 더 자주 찍도록 줄여놓음 (원하면 다시 256으로)
+batch_size_target: 128 #128
+batch_size_test: 8
+batch_size_train: 4 #64
+# -------------------------
+# LLaVA model configuration
+# -------------------------
+# LLaVAVQA에서 쓰는 HF repo / alias
+# - 그대로 repo id를 써도 되고
+# - llava_vqa.py에서 resolve_llava_id()에 alias를 추가해놨다면 "llava-1.5-7b" 같은 별칭 사용 가능
+model_name: "llava-hf/llava-1.5-7b-hf"
+
+# 모델 로딩 dtype (llava_vqa.py에서 torch_dtype 선택에 사용)
+# - "bf16" | "fp16" | "fp32" 정도로 가정
+llava_dtype: "bf16"
+
+# generation 관련 하이퍼파라미터
+# LLaVAVQA.__init__에서 config['llava_gen']로 읽어서 model.generate()에 넘김
+llava_gen:
+  max_new_tokens: 6      # 답변 길이
+  num_beams: 1            # beam search 안 쓰면 1
+  do_sample: false        # deterministic (greedy / beam) generation
+
+task: scienceqa   # vqa | scienceqa
+
+# -------------------------
+# image / text size 등
+# -------------------------
+
+# dataset에서 이미지를 얼마나 resize할지에 대한 힌트용
+# (실제 LLaVA는 AutoProcessor가 내부에서 알아서 처리하지만,
+#  generic VQA dataset 코드에서 transform 만들 때 쓰일 수 있음)
+image_res: 336
+
+# question 토크나이징 최대 길이 (vqa.py에서 tokenizer(...)에 사용)
+max_tokens: 64
+
+# rank 기반 inference에서 쓰던 k_test는 generate 모드에서는 사용 안 하지만,
+# 코드 호환성 위해 남겨둠
+k_test: 64
+
+# -------------------------
+# inference mode
+# -------------------------
+# LLaVA는 open-ended generation만 사용
+inference: 'generate'
+
+# -------------------------
+# optimization config
+# -------------------------
+# zero-shot (--zero_shot)로만 쓸 거면 사실 학습 관련 설정은 안 쓰이긴 하지만,
+# 코드가 공통으로 arg_sche / arg_opt를 읽으니까 형식만 맞춰 둠.
+init_lr: 2e-5
+
+optimizer:
+  init_lr: 2e-5
+  weight_decay: 0.05
+  min_lr: 0
+
+scheduler:
+  epochs: 10
+  num_warmup_steps: 0
+  sched: cosine
+
+# SHiRA / pruning 관련 epoch 수 (LLaVA에서는 안 써도 되지만 형식상 유지)
+shira_epochs: 10
+
+# -------------------------
+# wandb logging
+# -------------------------
+wandb_data:
+  name: llava_vqa_zeroshot
+  project: VQA_LLaVA_generate
+  tags: [llava, zero_shot, generate]

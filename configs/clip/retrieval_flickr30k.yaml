@@ -1,0 +1,39 @@
+batch_size_target: 128
+batch_size_test: 32
+batch_size_test_text: 32
+batch_size_train: 32
+
+train_file: [data/finetune/itr/flickr30k_train.json]
+val_file: data/finetune/itr/flickr30k_val.json
+test_file: data/finetune/itr/flickr30k_test.json
+
+image_root: 'images/flickr30k'
+ann_root: 'annotation'
+dataset: 'flickr30k'
+
+model_name: openai/clip-vit-large-patch14
+image_res: 224
+max_tokens: 77
+
+grad_acc_steps: 4
+k_test: 256
+
+optimizer: {opt: adamW, lr: 1e-05, weight_decay: 0.05}
+scheduler: {sched: cosine, epochs: 3, lr: 5e-06, num_warmup_steps: 0}
+save_freq: -1
+wandb_data:
+  name: clip_itr_flickr30k
+  project: your_project_name
+  tags: [clip, vit-l-14, itr, flickr30k]
+
+runtime_slice:
+  axis: dim
+  enable: true
+  drop_percent: 0.3
+  center_input: false
+  pca_q_extra: 16
+  max_q: 4096
+  rotation: topk
+  base_seed: 42
+  freeze_random: true
+  freeze_basis: false

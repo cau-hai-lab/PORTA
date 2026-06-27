@@ -1,0 +1,14 @@
+max_tokens: 77
+image_res: 224
+batch_size: 8
+return_index: false
+use_test_transform: false
+
+textcaps_file: 'data/pretrain/textcaps_s64_pretrain.json'
+textcaps_image_root: 'images/textcaps_s512'
+
+image_key:   "image"
+caption_key: "caption"
+dataset_key: "dataset"
+
+max_words: 40

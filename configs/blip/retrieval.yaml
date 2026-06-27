@@ -1,0 +1,79 @@
+batch_size_target: 32
+batch_size_test: 2
+batch_size_test_text: 16
+batch_size_train: 2
+
+train_file: [data/finetune/itr/coco_train.json]
+val_file: data/finetune/itr/coco_val.json
+test_file: data/finetune/itr/coco_test.json
+
+# train_file: [data/finetune/itr/flickr30k_train.json]
+# val_file: data/finetune/itr/flickr30k_val.json
+# test_file: data/finetune/itr/flickr30k_test.json
+
+# train_file: [data/finetune/itr/rsicd_train.json]
+# val_file: data/finetune/itr/rsicd_val.json
+# test_file: data/finetune/itr/rsicd_test.json
+
+# train_file: [data/finetune/itr/nwpu_train.json]
+# val_file: data/finetune/itr/nwpu_val.json
+# test_file: data/finetune/itr/nwpu_test.json
+
+image_root: 'images/coco'
+ann_root: 'annotation'
+dataset: 'coco'
+
+# image_root: 'images/flickr30k'
+# ann_root: 'annotation'
+# dataset: 'flickr30k'
+
+# image_root: 'images/rsicd'
+# ann_root: 'annotation'
+# dataset: 'rsicd'
+
+# image_root: 'images/NWPU-captions'
+# ann_root: 'annotation'
+# dataset: 'nwpu'
+
+# set pretrained as a file path or an url
+pretrained: ''
+
+# size of vit model; base or large
+vit: 'base'
+vit_grad_ckpt: False
+vit_ckpt_layer: 4
+
+image_res: 224
+queue_size: 57600
+alpha: 0.4
+# alpha: 0.5
+k_test: 64
+negative_all_rank: False
+
+# optimizer
+# optimizer: {init_lr: 1e-5, weight_decay: 0.05, min_lr: 0}
+# scheduler: {epochs: 3, num_warmup_steps: 0, sched: cosine} # 6
+
+optimizer:
+  opt: adamw
+  init_lr: 1e-5
+  min_lr: 0
+  weight_decay: 0.05
+
+
+scheduler:
+  epochs: 3
+  num_warmup_steps: 0
+  sched: cosine
+
+shira_epochs: 10
+
+# save frequency (in epochs)
+save_freq: 1
+max_tokens: 35
+
+# config for W&B
+wandb_data:
+  name: no_mask
+  project: retrieval_nwpu_epoch_10
+  tags: [no_mask]

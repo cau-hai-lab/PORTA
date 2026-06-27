@@ -1,0 +1,103 @@
+{
+  "model": {
+    "name": "CLIPModel",
+    "total_params": 427616513,
+    "trainable_params": 427616513,
+    "top_level": {
+      "text_model": "CLIPTextTransformer",
+      "vision_model": "CLIPVisionTransformer",
+      "text_projection": "Linear",
+      "visual_projection": "Linear",
+      "logit_scale": "scalar"
+    }
+  },
+  "text_branch": {
+    "embeddings": {
+      "token_embedding": {
+        "type": "Embedding",
+        "shape": [49408, 768]
+      },
+      "position_embedding": {
+        "type": "Embedding",
+        "shape": [77, 768]
+      }
+    },
+    "encoder": {
+      "type": "CLIPEncoder",
+      "layers": 12,
+      "layer_spec": {
+        "self_attn": {
+          "q_proj": {"type": "Linear", "weight_shape": [768, 768]},
+          "k_proj": {"type": "Linear", "weight_shape": [768, 768]},
+          "v_proj": {"type": "Linear", "weight_shape": [768, 768]},
+          "out_proj": {"type": "Linear", "weight_shape": [768, 768]}
+        },
+        "mlp": {
+          "fc1": {"type": "Linear", "weight_shape": [3072, 768]},
+          "fc2": {"type": "Linear", "weight_shape": [768, 3072]}
+        },
+        "norms": {
+          "layer_norm1": {"type": "LayerNorm", "normalized_shape": [768]},
+          "layer_norm2": {"type": "LayerNorm", "normalized_shape": [768]}
+        }
+      }
+    },
+    "final_layer_norm": {"type": "LayerNorm", "normalized_shape": [768]},
+    "summary": {
+      "hidden_size": 768,
+      "intermediate_size": 3072,
+      "num_layers": 12
+    }
+  },
+  "vision_branch": {
+    "embeddings": {
+      "patch_embedding": {"type": "Conv2d"},
+      "position_embedding": {"type": "Embedding"}
+    },
+    "norms": {
+      "pre_layrnorm": {"type": "LayerNorm", "normalized_shape": [1024]},
+      "post_layernorm": {"type": "LayerNorm", "normalized_shape": [1024]}
+    },
+    "encoder": {
+      "type": "CLIPEncoder",
+      "layers": 24,
+      "layer_spec": {
+        "self_attn": {
+          "q_proj": {"type": "Linear", "weight_shape": [1024, 1024]},
+          "k_proj": {"type": "Linear", "weight_shape": [1024, 1024]},
+          "v_proj": {"type": "Linear", "weight_shape": [1024, 1024]},
+          "out_proj": {"type": "Linear", "weight_shape": [1024, 1024]}
+        },
+        "mlp": {
+          "fc1": {"type": "Linear", "weight_shape": [4096, 1024]},
+          "fc2": {"type": "Linear", "weight_shape": [1024, 4096]}
+        },
+        "norms": {
+          "layer_norm1": {"type": "LayerNorm", "normalized_shape": [1024]},
+          "layer_norm2": {"type": "LayerNorm", "normalized_shape": [1024]}
+        }
+      }
+    },
+    "summary": {
+      "hidden_size": 1024,
+      "intermediate_size": 4096,
+      "num_layers": 24
+    }
+  },
+  "module_type_counts": {
+    "Linear": 218,
+    "LayerNorm": 75,
+    "CLIPEncoderLayer": 36,
+    "CLIPAttention": 36,
+    "CLIPMLP": 36,
+    "QuickGELUActivation": 36,
+    "Embedding": 3,
+    "CLIPEncoder": 2,
+    "ModuleList": 2,
+    "CLIPModel": 1
+  },
+  "pruning_recommendation_regex": {
+    "include": "(?:^|\\.)(self_attn\\.(?:q_proj|k_proj|v_proj|out_proj)|mlp\\.(?:fc1|fc2))\\.weight$",
+    "exclude": "(LayerNorm|layer_norm|final_layer_norm|pre_layrnorm|post_layernorm|embeddings\\.token_embedding|embeddings\\.position_embedding|embeddings\\.patch_embedding|class_embedding|text_projection|visual_projection|logit_scale)"
+  }
+}

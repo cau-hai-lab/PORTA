@@ -1,0 +1,14 @@
+max_tokens: 77
+image_res: 224
+batch_size: 8
+return_index: false
+use_test_transform: false
+
+vg_file: 'data/pretrain/vg_dense_gby_image.json'
+vg_image_root: 'images/vg'
+
+image_key:   "image"
+caption_key: "caption"
+dataset_key: "dataset"
+
+max_words: 40

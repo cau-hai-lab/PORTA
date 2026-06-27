@@ -1,0 +1,24 @@
+
+
+# ---- 모델 ----
+
+image_res: 224                              # transform에서 사용
+batch_size: 1
+return_index: false
+use_test_transform: false                   # transform 선택에 쓰고 싶으면 사용
+
+# ---- 데이터(필요한 것만 켜기) ----
+vg_file: 'data/pretrain/vg_dense_gby_image.json'
+flickr30k_file: 'data/pretrain/flickr30k_pretrain.json'
+# 이미지 루트
+vg_image_root: 'images/vg'
+flickr30k_image_root: 'images/flickr30k'
+model_name: Salesforce/blip2-opt-2.7b 
+
+# ---- 어노테이션 공통 키 (BLIP/XVLM 동일) ----
+image_key:   "image"
+caption_key: "caption"
+dataset_key: "dataset" 
+max_tokens: 40  
+# ---- 텍스트 전처리 옵션(있으면 pre_caption에서 사용) ----
+max_words: 40

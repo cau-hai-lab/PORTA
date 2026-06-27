@@ -1,0 +1,47 @@
+batch_size_target: 128
+batch_size_test: 32
+batch_size_test_text: 32
+batch_size_train: 32
+
+train_file: [data/finetune/itr/coco_train.json]
+val_file: data/finetune/itr/coco_val.json
+test_file: data/finetune/itr/coco_test.json
+
+
+image_root: 'images/coco'
+ann_root: 'annotation'
+dataset: 'coco'
+
+model_name : openai/clip-vit-large-patch14 
+image_res: 224                          # L/14 기본 224. 336 쓰려면 아래 주석대로 변경
+max_tokens: 77                          # CLIP 최대 토큰 길이
+
+# ckpt: openai/clip-vit-large-patch14-336
+# image_res: 336
+
+# --- Training ---
+grad_acc_steps: 4
+k_test: 256
+
+# --- Optimizer/Scheduler ---
+optimizer: {opt: adamW, lr: 1e-05, weight_decay: 0.05}
+scheduler: {sched: cosine, epochs: 3, lr: 5e-06, num_warmup_steps: 0}
+
+# --- Save / Logging ---
+save_freq: -1
+wandb_data:
+  name: clip_itr_run
+  project: your_project_name
+  tags: [clip, vit-l-14, itr]
+
+runtime_slice:
+  axis: dim              # dim: 채널 축 슬라이스 / token: 토큰 축 슬라이스
+  enable: true           # true면 clip_evaluation 시작 직전에 래퍼로 교체
+  drop_percent: 0.3       # N% drop → 0.3 == 30% drop (현재 코드가 0~1로 기대함)
+  center_input: false     # PCA 추정 시 입력 중심화 여부 (false 권장: 비교가 단순)
+  pca_q_extra: 16         # pca_lowrank 과샘플링 여유 차수
+  max_q: 4096 
+  rotation: topk
+  base_seed: 42
+  freeze_random: true
+  freeze_basis: false

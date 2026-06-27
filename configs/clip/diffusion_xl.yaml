@@ -1,0 +1,39 @@
+# configs/diffusion_eval_sdxl_min.yaml
+model_name: "stabilityai/stable-diffusion-xl-base-1.0"
+
+prompts_file: "data/finetune/diffusion/pap_v2_2k.json"
+image_root: "images/coco"
+output_dir: "outputs/diffusion_eval_sdxl"
+
+mode: per_image
+caption_policy: first
+text_key: caption
+image_key: image
+
+image_res: 224            # 메트릭 전처리 해상도(그대로 유지)
+max_tokens: 77
+
+# --- SDXL에서는 메모리 때문에 batch 줄이고 해상도/스텝/CFG 조정 ---
+batch_size_test: 8
+num_workers: 8
+
+num_inference_steps: 30
+guidance_scale: 5.0
+height: 1024
+width: 1024
+seed: 42
+sampler: dpmpp_2m_karras         # 당신의 Generator가 인식하는 별칭으로
+
+limit_samples: 300
+
+# 파이프라인 최적화
+disable_safety_checker: true
+enable_attention_slicing: false   # xformers 쓰면 보통 false
+enable_vae_slicing: true
+enable_xformers: true
+
+normalize_embeddings: true
+negative_prompts:
+  - "lowres, blurry, bad anatomy, watermark, text, jpeg artifacts, cropped, worst quality, deformed, disfigured"
+
+metrics: ["CLIPScore", "PickScore", "HPSv2"]

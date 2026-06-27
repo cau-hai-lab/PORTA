@@ -1,0 +1,74 @@
+# configs/prune/pretrain_flamingo.yaml
+
+# =========================
+# 모델 / 토크나이저
+# =========================
+# Flamingo는 LM tokenizer max length가 CLIP(77)보다 훨씬 큼.
+# 프루닝 캘리브레이션은 너무 길 필요 없어서 128~256 정도 추천.
+max_tokens: 256
+
+# 이미지 전처리
+# OpenFlamingo 기본 CLIP ViT-L/14는 224를 사용
+image_res: 224
+
+# =========================
+# 배치 / 로더
+# =========================
+batch_size: 2              # Flamingo가 무거워서 CLIP-G보다 보통 줄임 (OOM 나면 2)
+return_index: false
+use_test_transform: false
+
+# =========================
+# Flamingo 입력 구성 (중요)
+# =========================
+# Flamingo는 "이미지-텍스트 in-context"가 컨셉이라,
+# 프루닝 캘리브레이션 시에도 최소한의 컨텍스트 포맷을 고정해두는 게 안전함.
+
+# 한 샘플에 들어갈 이미지 개수 (가장 기본은 1장)
+# (만약 너 로더가 multi-image를 지원하면 늘릴 수 있음)
+num_images: 1
+
+# few-shot in-context 예시 개수 (0이면 그냥 단일 caption conditioning)
+num_shots: 0
+
+# 이미지마다 붙일 텍스트(프롬프트) 템플릿
+# 너 코드베이스에 prompt formatting이 있으면 거기에 맞춰서 바꿔야 함.
+# 일단 가장 무난한 captioning/conditioning 형태로 둠.
+prompt_template: "{caption}"
+
+# (선택) 답변을 생성하는 모델이면, 정답(타깃) 텍스트를 분리할 수도 있음.
+# 너 pruning 파이프라인이 "caption만 loss로" 쓰면 아래 옵션이 필요 없을 수 있음.
+# target_template: "{caption}"
+
+# 텍스트 전처리 옵션 (기존과 동일하게 유지)
+max_words: 40
+
+# =========================
+# 데이터 (CLIP-G yaml 형식 그대로)
+# =========================
+
+# ---- 데이터(필요한 것만 켜기) ----
+# vg_file: 'data/pretrain/vg_dense_gby_image.json'
+# flickr30k_file: 'data/pretrain/flickr30k_pretrain.json'
+#cc3m_file: 'data/pretrain/cc3m_pretrain.json'
+# SkyScript_file: 'data/pretrain/SkyScript_pretrain.json'
+# nwpu_file: 'data/pretrain/nwpu_pretrain.json'
+# rsitmd_file: 'data/pretrain/rsitmd_pretrain.json'
+# rsicd_file: 'data/pretrain/rsicd_pretrain.json'
+# nlvr2_file: 'data/pretrain/nlvr2_train.json'
+coco_file: "data/pretrain/coco_pretrain.json"
+# # 이미지 루트
+
+# vg_image_root: 'images/vg'
+# flickr30k_image_root: 'images/flickr30k'
+#cc3m_image_root: 'images/cc3m'
+# SkyScript_image_root: 'images/SkyScript'
+# nwpu_image_root: 'images/NWPU-captions'
+# rsitmd_image_root: 'images/rsitmd'
+# rsicd_image_root: 'images/rsicd'
+# nlvr2_image_root: 'images/nlvr2'
+coco_image_root: "images/coco"
+# ---- 어노테이션 공통 키 (네 포맷 그대로) ----
+image_key: "image"
+caption_key: "caption"
+dataset_key: "dataset"

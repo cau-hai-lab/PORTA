@@ -1,0 +1,14 @@
+max_tokens: 77
+image_res: 224
+batch_size: 8
+return_index: false
+use_test_transform: false
+
+pascal50s_file: 'data/pretrain/pascal50s_s64_pretrain.json'
+pascal50s_image_root: 'images/pascal50s'
+
+image_key:   "image"
+caption_key: "caption"
+dataset_key: "dataset"
+
+max_words: 40

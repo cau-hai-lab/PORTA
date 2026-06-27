@@ -1,0 +1,38 @@
+# training data
+# each is a json file containing a list of dicts
+
+# each caption for the whole image is already contained in the region annotations
+vg_file: 'data/pretrain/vg_dense_gby_image.json'
+flickr30k_file: 'data/pretrain/flickr30k_pretrain.json'
+#cc3m_file: 'data/pretrain/cc3m_pretrain.json'
+# SkyScript_file: 'data/pretrain/SkyScript_pretrain.json'
+# nwpu_file: 'data/pretrain/nwpu_pretrain.json'
+# rsitmd_file: 'data/pretrain/rsitmd_pretrain.json'
+# rsicd_file: 'data/pretrain/rsicd_pretrain.json'
+# coco_file: 'data/pretrain/coco_pretrain.json'
+# image folders
+vg_image_root: 'images/vg'
+flickr30k_image_root: 'images/flickr30k'
+#cc3m_image_root: 'images/cc3m'
+# SkyScript_image_root: 'images/SkyScript'
+# nwpu_image_root: 'images/NWPU-captions'
+# rsitmd_image_root: 'images/rsitmd'
+# rsicd_image_root: 'images/rsicd'
+# coco_image_root: 'images/coco'
+
+# details of annotations (keys are shared among general and region-level files)
+image_key: 'image' 
+caption_key: 'caption' 
+# caption_detailed: 'caption_detailed' #SkyScript에서 좀 더 구체적인 설명, 주변 object들까지 설명?
+dataset_key: 'dataset'
+
+# pruning settings
+batch_size: 32
+
+# visual settings
+image_res: 224
+patch_size: 16
+
+use_test_transform: False
+max_words: 40
+max_tokens: 30

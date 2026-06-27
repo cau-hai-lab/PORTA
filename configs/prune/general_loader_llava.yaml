@@ -1,0 +1,48 @@
+# configs/llava/pretrain_llava_v15_7b.yaml
+
+# =====================
+#   Model / Training
+# =====================
+# LLaVA는 LLM 쪽 context가 길어서 CLIP/BLIP보다 max_tokens를 넉넉하게 주는 걸 추천
+max_tokens: 128          # LLaMA/Vicuna 쪽 text max length (필요하면 256 등으로 조절)
+max_words: 40            # pre_caption에서 사용할 최대 단어 수
+image_res: 336          # transform에서 사용할 이미지 해상도
+batch_size: 2            # 7B + vision tower라서 메모리 생각해서 CLIP/BLIP보다 좀 줄임
+return_index: false
+use_test_transform: false
+
+# =====================
+#   Training Data
+#   (CLIP/BLIP과 동일한 구조 사용)
+# =====================
+
+# 각 json은 dict 리스트를 담고 있음
+# vg_file:        'data/pretrain/vg_dense_gby_image.json'
+# flickr30k_file: 'data/pretrain/flickr30k_pretrain.json'
+#cc3m_file:     'data/pretrain/cc3m_pretrain.json'
+#SkyScript_file: 'data/pretrain/SkyScript_pretrain.json'
+#nwpu_file:     'data/pretrain/nwpu_pretrain.json'
+#rsitmd_file:   'data/pretrain/rsitmd_pretrain.json'
+#rsicd_file:    'data/pretrain/rsicd_pretrain.json'
+coco_file:     'data/pretrain/coco_pretrain.json'
+
+# 이미지 루트
+# vg_image_root:        'images/vg'
+# flickr30k_image_root: 'images/flickr30k'
+#cc3m_image_root:     'images/cc3m'
+#SkyScript_image_root: 'images/SkyScript'
+#nwpu_image_root:     'images/NWPU-captions'
+#rsitmd_image_root:   'images/rsitmd'
+#rsicd_image_root:    'images/rsicd'
+coco_image_root:     'images/coco'
+
+image_key:   'image'
+caption_key: 'caption'
+dataset_key: 'dataset'
+
+# =====================
+#   Tokenizer / LLM
+# =====================
+# LLaVAPretrainDataset / LLaVA용 tokenizer에서 사용
+# (pruning 쪽에서는 여기 모델 이름으로 AutoTokenizer.from_pretrained(model_name) 호출)
+model_name: 'llava-hf/llava-1.5-7b-hf'

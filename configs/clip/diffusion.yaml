@@ -1,0 +1,35 @@
+# configs/diffusion_eval_min.yaml
+model_name: "runwayml/stable-diffusion-v1-5"  # SD1.5 HF repo
+prompts_file: "data/finetune/itr/coco_val.json" # .txt/.jsonl/.json 지원
+image_root: 'images/coco'
+output_dir: "outputs/diffusion_eval"
+
+mode: per_image                                        # per_image | per_caption
+caption_policy: first                                  # first | random
+text_key: caption                                      # JSON의 캡션 키
+image_key: image              # (json일 때) 리스트 키 이름
+
+image_res: 224
+max_tokens: 77
+batch_size_test: 64
+num_workers: 8
+
+num_inference_steps: 20
+guidance_scale: 7.5
+height: 512
+width: 512
+seed: 42  
+sampler: dpmpp
+
+limit_samples: 100
+# 파이프라인 최적화
+disable_safety_checker: true
+enable_attention_slicing: true
+enable_vae_slicing: false
+enable_xformers: false
+
+# 임베딩 정규화(텍스트 인코딩 시)
+normalize_embeddings: true
+
+# 어떤 지표를 계산할지
+metrics: ["FID", "CLIPScore", "PickScore", "HPSv2"]
