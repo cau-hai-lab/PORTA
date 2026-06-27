@@ -90,19 +90,68 @@ images/
 
 > **Calibration.** All main experiments calibrate on MSCOCO (82,783 image–text pairs). PORTA is robust to the calibration source — performance varies by less than ~1% across MSCOCO, Flickr30k, and Visual Genome (Fig. 4).
 
+### Annotation Format
+
+All annotation JSON files are provided by `download_annots.sh` — no manual creation or modification is needed. The formats are as follows:
+
+**Retrieval** (`data/finetune/itr/`): each entry is a dict with an `image` path (relative to the corresponding `images/<dataset>/` root) and one or more captions.
+
+```json
+// coco_train.json  (single caption per entry)
+{"caption": "A woman wearing a net ...", "image": "val2014/COCO_val2014_000000522418.jpg", "image_id": "coco_522418"}
+
+// flickr30k_train.json  (multiple captions per entry)
+{"image": "train_images/1000092795.jpg", "caption": ["Two young guys ...", "..."], "dataset": "flickr30k", "image_id": 0}
+```
+
+> The `image` path in COCO JSON is relative to `images/coco/`; in Flickr30k JSON it is relative to `images/flickr30k/`. Flickr30k images must be placed inside a `train_images/` subdirectory: `images/flickr30k/train_images/<image_id>.jpg`.
+
+**ScienceQA** (`data/finetune/vqa/scienceqa_*.json`): each entry contains the full question, options, answer index, and metadata. No images are required.
+
+```json
+{"question_id": 1, "image": "image.png", "question": "Which of these states is farthest north?\nOptions:\nA. West Virginia\n...", "answer": 0, "answer_text": "West Virginia", "dataset": "scienceqa", "subject": "social science", ...}
+```
+
+**Diffusion prompts** (`data/finetune/diffusion/pap_v2_2k.json`): text-only prompts used to generate images for evaluation. No source images required.
+
+```json
+{"caption": "a car made of opal", "image": ""}
+```
+
+**ImageNet class index** (`data/imagenet/annots/imagenet_class_index.json`): maps integer class indices to `[synset_id, class_name]` pairs for zero-shot classification.
+
+```json
+{"0": ["n02119789", "kit fox"], "1": ["n02100735", "English setter"], ...}
+```
+
+**Flowers-102 splits** (`data/flowers102/annots/split.csv`): CSV with `split`, `filename`, `class` columns. The `filename` is relative to `data/flowers102/images/`.
+
+```
+split,filename,class
+train,image_00190.jpg,passion flower
+```
+
 ### Preprocessing Notes
 
 **ImageNet-1K** — The validation set must be organized into per-class subdirectories (ILSVRC synset format). After downloading and extracting `ILSVRC2012_img_val.tar`, run the official reorganization script:
 
 ```bash
-# Download the val labels
 wget https://raw.githubusercontent.com/soumith/imagenetloader.torch/master/valprep.sh
-bash valprep.sh   # must be run inside images/imagenet/val/
+bash valprep.sh   # run inside images/imagenet/val/
 ```
 
-The expected structure is `images/imagenet/val/<synset_id>/*.JPEG`.
+Expected structure: `images/imagenet/val/<synset_id>/*.JPEG`
 
-**Flowers-102** — Place the downloaded `jpg/` folder (102 flower categories) at `data/flowers102/`. The split annotations from `flowers102-annots.tar.gz` are automatically matched by the dataloader.
+**Flickr30k** — Images must be placed in a `train_images/` subdirectory to match the annotation paths:
+
+```
+images/flickr30k/
+└── train_images/
+    ├── 1000092795.jpg
+    └── ...
+```
+
+**Flowers-102** — Place the downloaded `jpg/` folder at `data/flowers102/images/`. The split CSV from `flowers102-annots.tar.gz` is matched automatically.
 
 **CIFAR-10 / CIFAR-100** — Downloaded automatically on first run via torchvision to `data/cifar10/` and `data/cifar100/`. No manual setup required.
 
