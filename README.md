@@ -90,6 +90,24 @@ images/
 
 > **Calibration.** All main experiments calibrate on MSCOCO (82,783 image–text pairs). PORTA is robust to the calibration source — performance varies by less than ~1% across MSCOCO, Flickr30k, and Visual Genome (Fig. 4).
 
+### Preprocessing Notes
+
+**ImageNet-1K** — The validation set must be organized into per-class subdirectories (ILSVRC synset format). After downloading and extracting `ILSVRC2012_img_val.tar`, run the official reorganization script:
+
+```bash
+# Download the val labels
+wget https://raw.githubusercontent.com/soumith/imagenetloader.torch/master/valprep.sh
+bash valprep.sh   # must be run inside images/imagenet/val/
+```
+
+The expected structure is `images/imagenet/val/<synset_id>/*.JPEG`.
+
+**Flowers-102** — Place the downloaded `jpg/` folder (102 flower categories) at `data/flowers102/`. The split annotations from `flowers102-annots.tar.gz` are automatically matched by the dataloader.
+
+**CIFAR-10 / CIFAR-100** — Downloaded automatically on first run via torchvision to `data/cifar10/` and `data/cifar100/`. No manual setup required.
+
+**Config paths** — All data paths in `configs/` are relative to the repository root. No path editing is needed as long as the directory structure above is followed.
+
 ## Pruning
 
 The main entry point is `prune.py`. Pruning runs on a single GPU with FP32 precision by default.
