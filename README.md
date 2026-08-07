@@ -165,7 +165,7 @@ The main entry point is `prune.py`. Pruning runs on a single GPU with FP32 preci
 
 | Model | Used for |
 |---|---|
-| OpenAI CLIP-ViT-bigG | Retrieval (MSCOCO, Flickr30k), Classification (Table 3, 4) |
+| OpenAI CLIP-ViT-bigG | Retrieval (MSCOCO, Flickr30k), Classification (Table 3) |
 | BLIP-base | Retrieval (Flickr30k) (Table 4) |
 | Qwen2-VL | VQA (ScienceQA) (Table 5) |
 | OpenFlamingo | Image Captioning (Appendix C) |
